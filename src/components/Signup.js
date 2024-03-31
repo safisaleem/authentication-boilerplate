@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signUp } from './api/auth';
+import { signUp } from '../api/auth';
 
 function Signup() {
   const [formData, setFormData] = useState({
@@ -23,7 +23,12 @@ function Signup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+      const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!passwordRegex.test(formData.password)) {
+      setError('Password must contain at least 8 characters, including at least one letter, one number, and one special character.');
+      return;
+    }
+  
     try {
       await signUp(formData);
       navigate('/signin');
